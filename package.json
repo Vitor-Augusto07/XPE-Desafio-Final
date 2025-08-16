@@ -1,0 +1,29 @@
+{
+  "name": "xpe-desafio-final",
+  "version": "1.0.0",
+  "description": "Criação de uma API REST com Arquitetura MVC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vitor-Augusto07/XPE-Desafio-Final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vitor-Augusto07/XPE-Desafio-Final/issues"
+  },
+  "homepage": "https://github.com/Vitor-Augusto07/XPE-Desafio-Final#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "joi": "^18.0.0",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
