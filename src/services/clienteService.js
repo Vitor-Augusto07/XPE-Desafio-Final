@@ -1,43 +1,38 @@
+const { Op } = require('sequelize');
 const Cliente = require('../models/Cliente');
 
-let nextId = 1;
-const clientes = []; // armazenamento dos clientes em memoria
-
-function listarTodos() {
-  return clientes;
+async function listarTodos() {
+  return Cliente.findAll();
 }
 
-function buscarPorId(id) {
-  return clientes.find(c => c.id === Number(id)) || null;
+async function buscarPorId(id) {
+  return Cliente.findByPk(Number(id));
 }
 
-function buscarPorNome(nome) {
-  const termo = String(nome).toLowerCase();
-  return clientes.filter(c => c.nome.toLowerCase().includes(termo));
+async function buscarPorNome(nome) {
+  return Cliente.findAll({
+    where: {
+      nome: { [Op.like]: `%${nome}%` }
+    }
+  });
 }
 
-function salvar({ nome, email }) {
-  const novo = new Cliente({ id: nextId++, nome, email });
-  clientes.push(novo);
-  return novo;
+async function salvar(payload) {
+  return Cliente.create(payload);
 }
 
-function atualizar(id, { nome, email }) {
-  const idx = clientes.findIndex(c => c.id === Number(id));
-  if (idx === -1) return null;
-  clientes[idx] = { ...clientes[idx], nome, email };
-  return clientes[idx];
+async function atualizar(id, payload) {
+  const cliente = await Cliente.findByPk(Number(id));
+  if (!cliente) return null;
+  return cliente.update(payload);
 }
 
-function deletar(id) {
-  const idx = clientes.findIndex(c => c.id === Number(id));
-  if (idx === -1) return false;
-  clientes.splice(idx, 1);
-  return true;
+async function deletar(id) {
+  return (await Cliente.destroy({ where: { id: Number(id) } })) > 0;
 }
 
-function contar() {
-  return clientes.length;
+async function contar() {
+  return Cliente.count();
 }
 
 module.exports = {
@@ -49,3 +44,4 @@ module.exports = {
   deletar,
   contar
 };
+

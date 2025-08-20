@@ -7,11 +7,12 @@ const schema = Joi.object({
 });
 
 async function listarTodos(req, res) {
-  res.json(service.listarTodos());
+  const itens = await service.listarTodos();
+  res.json(itens);
 }
 
 async function buscarPorId(req, res) {
-  const cli = service.buscarPorId(req.params.id);
+  const cli = await service.buscarPorId(req.params.id);
   if (!cli) return res.status(404).json({ message: 'Cliente não encontrado' });
   res.json(cli);
 }
@@ -19,30 +20,32 @@ async function buscarPorId(req, res) {
 async function buscarPorNome(req, res) {
   const { nome } = req.query;
   if (!nome) return res.status(400).json({ message: 'Parâmetro nome é obrigatório' });
-  res.json(service.buscarPorNome(nome));
+  const lista = await service.buscarPorNome(nome);
+  res.json(lista);
 }
 
 async function contar(req, res) {
-  res.json({ total: service.contar() });
+  const total = await service.contar();
+  res.json({ total });
 }
 
 async function criar(req, res) {
   const { error, value } = schema.validate(req.body);
   if (error) return res.status(400).json({ message: error.message });
-  const novo = service.salvar(value);
+  const novo = await service.salvar(value);
   res.status(201).json(novo);
 }
 
 async function atualizar(req, res) {
   const { error, value } = schema.validate(req.body);
   if (error) return res.status(400).json({ message: error.message });
-  const atualizado = service.atualizar(req.params.id, value);
+  const atualizado = await service.atualizar(req.params.id, value);
   if (!atualizado) return res.status(404).json({ message: 'Cliente não encontrado' });
   res.json(atualizado);
 }
 
 async function deletar(req, res) {
-  const ok = service.deletar(req.params.id);
+  const ok = await service.deletar(req.params.id);
   if (!ok) return res.status(404).json({ message: 'Cliente não encontrado' });
   res.status(204).send();
 }
