@@ -22,24 +22,53 @@ Inclui validação com **Joi**, **CORS**, **logs** com morgan e endpoints de **C
 
 ```
 .
-├─ package.json
-├─ data.sqlite           # criado automaticamente na 1ª execução
-└─ src/
-   ├─ app.js
-   ├─ server.js
-   ├─ db/
-   │  └─ index.js       # conexão Sequelize (SQLite)
-   ├─ models/
-   │  └─ Cliente.js     # modelo Sequelize
-   ├─ services/
-   │  └─ clienteService.js
-   ├─ controllers/
-   │  └─ clienteController.js
-   └─ routes/
-      └─ clienteRoutes.js
-```
+├── src/
+│   ├── app.js               # Configuração do Express (middlewares, rotas, healthcheck)
+│   ├── server.js            # Ponto de entrada da aplicação, sobe o servidor e conecta DB
+│   ├── db/
+│   │   └── index.js         # Configuração do Sequelize com SQLite
+│   ├── models/
+│   │   └── Cliente.js       # Definição da entidade Cliente (ORM Sequelize)
+│   ├── controllers/
+│   │   └── clienteController.js  # Lida com requisições e respostas HTTP
+│   ├── services/
+│   │   └── clienteService.js     # Regras de negócio e interface com Models
+│   ├── routes/
+│   │   └── clienteRoutes.js      # Define as rotas da API e associa aos Controllers
+│   └── ...
+├── data.sqlite              # Banco de dados SQLite (gerado automaticamente)
+├── package.json
+├── README.md
 
----
+```
+## 📖 Explicação dos Componentes
+
+- **`server.js`**  
+  Ponto de entrada da aplicação. Faz a sincronização do banco com `sequelize.sync()` e inicializa o servidor Express na porta configurada.
+
+- **`app.js`**  
+  Configuração principal do Express. Define middlewares globais (`cors`, `morgan`, `express.json()`), rota de healthcheck (`/health`) e registra as rotas da aplicação.
+
+- **`db/index.js`**  
+  Responsável pela configuração e inicialização da conexão com o banco de dados utilizando Sequelize e SQLite. Define onde o arquivo `data.sqlite` será salvo.
+
+- **`models/`**  
+  Contém as entidades do domínio mapeadas no banco.  
+  - **`Cliente.js`**: Define o modelo `Cliente` com campos `id`, `nome` e `email`, mapeado para a tabela `clientes`.
+
+- **`controllers/`**  
+  Responsáveis por receber as requisições HTTP, validar os dados (com **Joi**) e retornar a resposta adequada. Encaminham a lógica de negócio para os services.
+
+- **`services/`**  
+  Implementam a lógica de negócio da aplicação. São responsáveis por interagir com os models e retornar dados tratados para os controllers.
+
+- **`routes/`**  
+  Definem os endpoints da API e fazem o mapeamento das rotas para os controllers correspondentes.  
+  Exemplo: `GET /api/clientes` chama `clienteController.listarTodos`.
+
+- **`data.sqlite`**  
+  Arquivo físico do banco de dados SQLite, criado e manipulado pelo Sequelize para persistência dos dados.
+
 
 ## ⚙️ Instalação e Execução
 
